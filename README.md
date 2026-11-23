@@ -45,7 +45,7 @@ npm test       # model and live-timing parser tests (node:test)
 ## Data sources
 
 - **Past sessions** from [OpenF1](https://openf1.org) (free), cached locally.
-- **Live sessions** from recordings of the official live-timing feed written by its companion project [**f1-telemetry-live**](https://github.com/GiuseppeSavoia/f1-telemetry-live) (Fast-F1). The panel tails the recording every 3 s, follows real time and lets you drop back to "delayed" mode to stay in sync with the video. Start/tyre history is reconstructed when the feed joins mid-race.
+- **Live sessions** from recordings of the official live-timing feed written by its companion project [**f1-telemetry-live**](https://github.com/GiuseppeSavoia/f1-telemetry-live) (Fast-F1). Point the panel to its `recordings/` folder with `F1DATA_RECORDINGS=/path/to/f1-telemetry-live/recordings npm start`. The panel tails the recording every 3 s, follows real time and lets you drop back to "delayed" mode to stay in sync with the video. Start/tyre history is reconstructed when the feed joins mid-race.
 
 On Mexico 2026 the two sources agree on > 99% of lap times, the finishing order and telemetry.
 
