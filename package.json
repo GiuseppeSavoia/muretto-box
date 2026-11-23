@@ -1,0 +1,12 @@
+{
+  "name": "pit-wall",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Muretto box personale per seguire un GP da ingegnere di pista, con i dati OpenF1.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  }
+}

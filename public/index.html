@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Muretto box</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <header class="bar">
+      <strong class="brand">MURETTO</strong>
+      <label>Gara <select id="session"></select></label>
+      <label>Il mio pilota <select id="me"></select></label>
+      <label>Confronto <select id="rival"></select></label>
+      <div class="status" id="status" role="status"></div>
+      <div class="lapcount"><span id="lap">—</span></div>
+      <div class="weather" id="weather"></div>
+    </header>
+
+    <div class="transport">
+      <button id="back60" title="Indietro 60 s (Maiusc + ←)">−60</button>
+      <button id="back10" title="Indietro 10 s (←)">−10</button>
+      <button id="play" class="primary" title="Avvia o ferma (spazio)">Avvia</button>
+      <button id="fwd10" title="Avanti 10 s (→)">+10</button>
+      <button id="fwd60" title="Avanti 60 s (Maiusc + →)">+60</button>
+      <label>Velocità
+        <select id="speed">
+          <option value="1">1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+          <option value="8">8×</option>
+          <option value="16">16×</option>
+          <option value="60">60×</option>
+        </select>
+      </label>
+      <input id="scrub" type="range" min="0" max="1" step="1000" value="0" aria-label="Posizione nella gara" />
+      <output id="clock">00:00:00</output>
+      <button id="goLive" class="live" hidden title="Torna all'ora reale">In diretta</button>
+    </div>
+
+    <p id="notice" class="notice" hidden></p>
+
+    <main class="grid">
+      <section class="panel tower-panel">
+        <h2>Classifica</h2>
+        <div class="scroll">
+          <table class="tower">
+            <thead>
+              <tr>
+                <th>P</th><th>Pilota</th><th class="n">Distacco</th><th class="n">Int.</th><th>Gomma</th><th class="n">Ultimo</th><th class="n">Soste</th>
+              </tr>
+            </thead>
+            <tbody id="tower"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="col col-mid">
+        <section class="panel battle">
+          <div class="duel">
+            <h3>Davanti</h3>
+            <p class="who" id="aheadWho">—</p>
+            <p class="big" id="aheadGap">—</p>
+            <p class="sub" id="aheadRate">—</p>
+          </div>
+          <div class="duel me">
+            <h3>Il tuo pilota</h3>
+            <p class="who" id="meWho">—</p>
+            <p class="big" id="mePos">—</p>
+            <p class="sub" id="meSub">—</p>
+          </div>
+          <div class="duel">
+            <h3>Dietro</h3>
+            <p class="who" id="behindWho">—</p>
+            <p class="big" id="behindGap">—</p>
+            <p class="sub" id="behindRate">—</p>
+          </div>
+        </section>
+
+        <section class="panel calls-panel">
+          <h2>Chiamate</h2>
+          <ul id="calls" class="calls"></ul>
+        </section>
+
+        <div class="charts-row">
+          <section class="panel chart-panel">
+            <header class="chart-head">
+              <h2>Tempi sul giro</h2>
+              <div class="legend" data-legend></div>
+              <button class="ghost" data-table="laps">Tabella</button>
+            </header>
+            <p class="hint">Solo giri puliti. Clicca un giro per aprirne la telemetria.</p>
+            <div class="chart" id="lapChart"></div>
+          </section>
+          <section class="panel chart-panel">
+            <header class="chart-head">
+              <h2 id="gapTitle">Distacco</h2>
+              <button class="ghost" data-table="gap">Tabella</button>
+            </header>
+            <p class="hint">Sopra lo zero il tuo pilota è dietro.</p>
+            <div class="chart" id="gapChart"></div>
+          </section>
+        </div>
+
+        <section class="panel chart-panel telemetry">
+          <header class="chart-head">
+            <h2 id="telTitle">Telemetria</h2>
+            <div class="legend" data-legend></div>
+            <button class="ghost" data-table="tel">Tabella</button>
+          </header>
+          <div class="multiples" id="telBody">
+            <div class="multiple"><span>Velocità km/h</span><div class="chart" id="telSpeed"></div></div>
+            <div class="multiple"><span>Acceleratore %</span><div class="chart" id="telThrottle"></div></div>
+            <div class="multiple"><span>Freno %</span><div class="chart" id="telBrake"></div></div>
+            <div class="multiple"><span>Delta s, sopra lo zero più lento</span><div class="chart" id="telDelta"></div></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="col col-right">
+        <section class="panel strategy">
+          <h2>Strategia</h2>
+          <dl>
+            <dt>Gomma</dt><dd id="stTyre">—</dd>
+            <dt>Degrado</dt><dd id="stDeg">—</dd>
+            <dt>Perdita box</dt><dd id="stLoss">—</dd>
+            <dt>Se entri ora</dt><dd id="stBox">—</dd>
+            <dt>Finestra</dt><dd id="stWindow">—</dd>
+            <dt>Undercut</dt><dd id="stCut">—</dd>
+          </dl>
+          <button id="callBox" class="primary wide">Chiama BOX</button>
+          <ul id="decisions" class="decisions"></ul>
+        </section>
+
+        <section class="panel feed-panel">
+          <h2>Direzione gara</h2>
+          <ul id="rc" class="feed"></ul>
+        </section>
+
+        <section class="panel feed-panel radio-panel">
+          <h2>Team radio</h2>
+          <ul id="radio" class="feed"></ul>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
